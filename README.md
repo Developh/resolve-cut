@@ -10,6 +10,7 @@
 [![DaVinci Resolve Studio](https://img.shields.io/badge/DaVinci%20Resolve%20Studio-21.1-0b0b0b.svg)]()
 [![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-0b0b0b.svg)]()
 [![Tested on macOS](https://img.shields.io/badge/tested%20on-macOS-0b0b0b.svg)]()
+[![tests](https://github.com/tiagonrodrigues/davinci-resolve-agent/actions/workflows/tests.yml/badge.svg)](https://github.com/tiagonrodrigues/davinci-resolve-agent/actions/workflows/tests.yml)
 
 An agent skill plus the scripts behind it. The agent reads word-level transcripts of the raw footage, keeps the last complete take of every paragraph, builds a frame-accurate cut list, assembles the timeline in DaVinci Resolve by script, renders it with a preset and checks the file before it says it's done: loudness, frames, bitrate, and a transcript of the final mix to catch words doubled or cut at the edits.
 
@@ -165,9 +166,12 @@ skills/davinci-resolve-agent/
   scripts/media/              plain Python and ffmpeg
     transcribe.py  dossier.py  inspect_range.py  cut_list.py  add_markers.py
     qc.py  loudness.py  deliver.py
+tests/                        the Resolve scripts against a fake Resolve API; cut list,
+                              markers and dossier on synthetic transcripts
+assets/src/                   sources of the hero image and the QR code
 ```
 
-Every script answers `--help`. Run against a fake Resolve API and synthetic transcripts after the English rewrite; the measured run above used the same scripts before the rewrite.
+Every script answers `--help`. `python3 tests/test_resolve_scripts.py` and `python3 tests/test_media_scripts.py` check the scripts' own logic without Resolve or ffmpeg; the traps in the skill were measured on the real thing. The run in "The problem" used the Portuguese originals of these scripts; this repo has them translated and generalized.
 
 ## License
 
