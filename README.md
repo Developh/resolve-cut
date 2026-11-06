@@ -72,7 +72,7 @@ Tested on macOS (Apple Silicon) with Resolve Studio 21.1.2. The scripts use the 
 bunx skills add tiagonrodrigues/davinci-resolve-agent -g -a claude-code
 ```
 
-(`npx skills add ...` works too.) This installs `davinci-resolve-agent` into `~/.claude/skills/`, scripts and render presets included. Check that Resolve answers:
+This installs `davinci-resolve-agent` into `~/.claude/skills/`, scripts and render presets included. Check that Resolve answers:
 
 ```bash
 python3 ~/.claude/skills/davinci-resolve-agent/scripts/resolve/run.py - '{}' <<< 'result = resolve.GetVersionString()'
@@ -145,7 +145,7 @@ Real incidents from October and November 2026, each one now a rule in the skill.
 - **The agent stopped with the render running.** Headless, it ended its turn with "I'll let you know when it finishes", and nobody called it again. The prompt now says "wait for the render to finish".
 - **The transcript put a word 3 s early.** A clap and a whisper came before "Portanto", and Scribe placed it at 1.96 s when it is spoken at 4.85 s. The agent's own QC caught it in the render, and it confirmed on the waveform before fixing the cut.
 - **A false start survived the first cut.** "co- contar": the agent cut the "co-" inside the take, to the frame, and the punch-in hides the jump.
-- **A helper wrote into the raw footage drive.** `inspect_range.py` used to save its image next to the clip. Now it writes to the current folder.
+- **A helper wrote into the raw footage drive.** The range inspector used to save its image next to the clip, on the drive with the raw footage. Now it writes to the current folder.
 
 What worked best:
 
