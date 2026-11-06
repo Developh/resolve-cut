@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>davinci-resolve-agent hero</title>
+<!--
+  Source of assets/hero.png (3200x1440). Rendered with headless Chrome at 2x:
+  chrome --headless=new --user-data-dir=<temp dir> --hide-scrollbars --force-device-scale-factor=2 \
+         --window-size=1600,720 --virtual-time-budget=8000 --screenshot=assets/hero.png assets/src/hero.html
+  Every line in the terminal is from the real run of 6 November 2026 (times are wall clock).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0b0b;
+    --surface: #111111;
+    --line: #222222;
+    --line-soft: #1a1a1a;
+    --fg: #eeeeee;
+    --fg-2: #b4b4b4;
+    --fg-3: #8a8a8a;
+    --fg-4: #666666;
+    --accent: #f5cc58;
+    --clip: #2b2b2b;
+    --clip-punch: #3a3a3a;
+    --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1600px; height: 720px; overflow: hidden; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    font-synthesis: none;
+    padding: 46px 80px 0;
+  }
+  header { display: flex; align-items: center; justify-content: space-between; height: 36px; }
+  .path { font-family: var(--mono); font-size: 23px; font-weight: 500; letter-spacing: -0.01em; }
+  .path span { color: var(--fg-3); }
+  .pill {
+    font-family: var(--mono); font-size: 12.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--fg-2); border: 1px solid var(--line); border-radius: 999px; padding: 9px 18px;
+  }
+  .window {
+    margin-top: 30px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden;
+  }
+  .bar {
+    position: relative; height: 42px; display: flex; align-items: center; padding: 0 18px; gap: 8px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; background: #2a2a2a; }
+  .bar .title {
+    position: absolute; left: 0; right: 0; text-align: center; font-family: var(--mono); font-size: 13px; color: var(--fg-4);
+  }
+  .term { padding: 26px 38px 30px; font-family: var(--mono); font-size: 15px; line-height: 1.72; }
+  .prompt { color: var(--fg); }
+  .prompt b { color: var(--accent); font-weight: 500; margin-right: 12px; }
+  .log { display: grid; grid-template-columns: 96px 104px 1fr; margin-top: 14px; font-variant-numeric: tabular-nums; }
+  .log .t { color: var(--fg-4); }
+  .log .k { color: var(--fg-3); }
+  .log .m { color: #dcdcdc; }
+  .log .m i { font-style: normal; color: var(--fg-4); }
+  .done { margin-top: 14px; color: var(--fg); }
+  .done b { color: var(--accent); font-weight: 500; margin-right: 12px; }
+  .tl { margin-top: 24px; display: grid; grid-template-columns: 34px 1fr; row-gap: 6px; align-items: center; }
+  .tl .lab { font-size: 11px; color: var(--fg-4); letter-spacing: 0.06em; }
+  .ruler { position: relative; height: 16px; font-size: 11px; color: var(--fg-4); }
+  .ruler span { position: absolute; top: 0; transform: translateX(-50%); }
+  .ruler span:first-child { transform: none; }
+  .track { display: flex; gap: 2px; position: relative; }
+  .v1 { height: 26px; }
+  .a1 { height: 12px; }
+  .seg { height: 100%; border-radius: 3px; background: var(--clip); display: flex; align-items: center; padding-left: 7px;
+         font-size: 10.5px; color: var(--fg-3); overflow: hidden; white-space: nowrap; }
+  .seg.p { background: var(--clip-punch); color: var(--fg-2); }
+  .a1 .seg { background: #1f1f1f; }
+  .a1 .seg.p { background: #262626; }
+  .head { position: absolute; top: -5px; bottom: -20px; right: -1px; width: 2px; background: var(--accent); border-radius: 1px; }
+  footer { display: flex; justify-content: center; margin-top: 32px; }
+  .sig {
+    width: 96px; aspect-ratio: 1710 / 1041; background: var(--fg); opacity: 0.55;
+    -webkit-mask: url(https://www.tiagonrodrigues.com/signature.png) center / contain no-repeat;
+    mask: url(https://www.tiagonrodrigues.com/signature.png) center / contain no-repeat;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="path"><span>~/</span>davinci-resolve-agent</div>
+    <div class="pill">Claude Code skill · Resolve Studio 21.1</div>
+  </header>
+
+  <div class="window">
+    <div class="bar">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="title">claude -p · lesson 01 · 6 Nov 2026</div>
+    </div>
+    <div class="term">
+      <div class="prompt"><b>$</b>claude -p "Edit lesson 01 of our SEO course, from the raw recording to a rendered episode."</div>
+      <div class="log">
+        <div class="t">12:09:29</div><div class="k">dossier</div><div class="m">34 clips, 22.2 min of raw footage, read as text</div>
+        <div class="t">12:10:07</div><div class="k">takes</div><div class="m">last complete take of each paragraph <i>·</i> 10 takes from 9 clips</div>
+        <div class="t">12:10:41</div><div class="k">resolve</div><div class="m">timeline assembled <i>·</i> 2753 frames, as expected</div>
+        <div class="t">12:11:22</div><div class="k">render</div><div class="m">done in 15 s</div>
+        <div class="t">12:12:13</div><div class="k">qc</div><div class="m">"Portanto" is spoken at 4.85 s, not 1.96 <i>·</i> cut moved</div>
+        <div class="t">12:12:27</div><div class="k">qc</div><div class="m">false start "co- contar" <i>·</i> cut inside the take</div>
+        <div class="t">12:12:48</div><div class="k">resolve</div><div class="m">v2 assembled <i>·</i> 11 shots, 2671 frames</div>
+        <div class="t">12:13:30</div><div class="k">qc</div><div class="m">-16.4 LUFS <i>·</i> true peak -1.4 dBTP <i>·</i> no defects left</div>
+      </div>
+      <div class="done"><b>✓</b>1 min 47 s episode, rendered and checked 4 min 37 s after the prompt</div>
+
+      <div class="tl" id="tl">
+        <div></div>
+        <div class="ruler" id="ruler"></div>
+        <div class="lab">V1</div>
+        <div class="track v1" id="v1"></div>
+        <div class="lab">A1</div>
+        <div class="track a1" id="a1"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer><div class="sig" role="img" aria-label="Tiago Rodrigues"></div></footer>
+
+<script>
+  // Lesson 01 v2, the timeline the agent rendered: take label, frames, punch-in (zoom 1.2)
+  const segs = [["01a", 207, 0], ["01b1", 471, 1], ["01b3", 178, 0], ["01b4", 276, 1], ["01b5", 109, 0], ["01c", 259, 1],
+                ["01d1", 89, 0], ["01d1", 379, 1], ["01d2", 232, 0], ["01e1", 366, 1], ["01e2", 105, 0]];
+  const total = segs.reduce((a, s) => a + s[1], 0);   // 2671 frames at 25 fps = 1:46.84
+  for (const id of ["v1", "a1"]) {
+    const track = document.getElementById(id);
+    for (const [label, n, punch] of segs) {
+      const d = document.createElement("div");
+      d.className = "seg" + (punch ? " p" : "");
+      d.style.flex = `${n} 1 0`;
+      if (id === "v1") d.textContent = label;
+      track.appendChild(d);
+    }
+  }
+  const head = document.createElement("div"); head.className = "head"; document.getElementById("v1").appendChild(head);
+  const ruler = document.getElementById("ruler");
+  for (const [t, label] of [[0, "0:00"], [30, "0:30"], [60, "1:00"], [90, "1:30"]]) {
+    const s = document.createElement("span"); s.textContent = label; s.style.left = `${(t * 25 / total) * 100}%`; ruler.appendChild(s);
+  }
+  const end = document.createElement("span"); end.textContent = "1:47"; end.style.left = "100%"; end.style.color = "var(--accent)";
+  end.style.transform = "translateX(calc(-100% - 8px))"; ruler.appendChild(end);
+</script>
+</body>
+</html>
