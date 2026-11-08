@@ -17,7 +17,7 @@ An agent skill plus the scripts behind it. The agent reads word-level transcript
 
 ## The problem
 
-We record the video lessons for [Forma](https://learnforma.com), a hands-on learning platform. A presenter reads a script to camera and retakes each paragraph until it comes out right, so the raw footage is mostly repeats. One recording session for the SEO course:
+We record the video lessons for [Forma](https://learnforma.com), a digital school where people learn by building. A presenter reads a script to camera and retakes each paragraph until it comes out right, so the raw footage is mostly repeats. One recording session for the SEO course:
 
 ```
 34 clips · 22.2 min of raw footage

@@ -53,7 +53,10 @@ def seconds(x, fps):
 
 
 def ff(*a, **kw):
-    return subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-threads", "2", *a], capture_output=True, stdin=subprocess.DEVNULL, **kw)
+    """ffmpeg at low priority with 2 filter threads. This -threads 2 limits only the first input: repeat it before every
+    other -i and before the output's encoder."""
+    return subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-filter_threads", "2", "-filter_complex_threads", "2",
+                           "-threads", "2", *a], capture_output=True, stdin=subprocess.DEVNULL, **kw)
 
 
 def grab_frames(f, t0, t1, n, tw, th, fps):
@@ -62,7 +65,7 @@ def grab_frames(f, t0, t1, n, tw, th, fps):
     base = max(0, t0 - 0.5)
     select = "+".join(f"eq(n\\,{round((t - base) * fps)})" for t in ts)
     # one ffmpeg from t0: select by frame number (exact), raw RGB out
-    r = ff("-ss", f"{base:.3f}", "-i", f, "-t", f"{dur + 1:.3f}",
+    r = ff("-ss", f"{base:.3f}", "-i", f, "-threads", "2", "-t", f"{dur + 1:.3f}",
            "-vf", f"setpts=PTS-STARTPTS,select='{select}',scale={tw}:{th}:flags=area", "-vsync", "0",
            "-frames:v", str(n), "-f", "rawvideo", "-pix_fmt", "rgb24", "-")
     buf = np.frombuffer(r.stdout, np.uint8)
@@ -71,7 +74,7 @@ def grab_frames(f, t0, t1, n, tw, th, fps):
 
 
 def waveform(f, t0, t1, width):
-    r = ff("-ss", f"{t0:.3f}", "-t", f"{t1 - t0:.3f}", "-i", f, "-map", "0:a:0", "-ac", "1", "-ar", "8000", "-f", "s16le", "-")
+    r = ff("-ss", f"{t0:.3f}", "-t", f"{t1 - t0:.3f}", "-i", f, "-threads", "2", "-map", "0:a:0", "-ac", "1", "-ar", "8000", "-f", "s16le", "-")
     a = np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768
     if not len(a):
         return None

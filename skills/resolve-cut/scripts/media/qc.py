@@ -41,11 +41,13 @@ def run(cmd, **kw):
 
 
 def ff(*a):
-    return ["nice", "-n", "15", "ffmpeg", "-hide_banner", "-threads", "2", *a]
+    """ffmpeg at low priority with 2 filter threads. This -threads 2 limits only the first input: repeat it before every
+    other -i and before the output's encoder."""
+    return ["nice", "-n", "15", "ffmpeg", "-hide_banner", "-filter_threads", "2", "-filter_complex_threads", "2", "-threads", "2", *a]
 
 
 def probe(f):
-    return json.loads(run(["ffprobe", "-v", "error", "-show_streams", "-show_format", "-of", "json", f]).stdout)
+    return json.loads(run(["nice", "-n", "15", "ffprobe", "-v", "error", "-show_streams", "-show_format", "-of", "json", f]).stdout)
 
 
 def atoms(f):
@@ -94,7 +96,7 @@ def loudness(f):
 
 
 def audio_md5(f):
-    o = run(ff("-v", "error", "-i", f, "-map", "0:a:0", "-f", "md5", "-")).stdout.strip()
+    o = run(ff("-v", "error", "-i", f, "-map", "0:a:0", "-threads", "2", "-f", "md5", "-")).stdout.strip()
     return o.split("=")[-1] if o else None
 
 
@@ -111,7 +113,7 @@ def frozen(f):
 
 def irregular_times(f, fps):
     # packet timestamps, no decoding: the same as the frames', 0.1 s instead of 10 s for a 36 s Reel
-    o = run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "packet=pts_time", "-of", "csv=p=0", f]).stdout
+    o = run(["nice", "-n", "15", "ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "packet=pts_time", "-of", "csv=p=0", f]).stdout
     ts = sorted(float(x.split(",")[0]) for x in o.split() if x.split(",")[0].strip())
     step = 1 / fps
     return [round(b, 3) for a, b in zip(ts, ts[1:]) if abs((b - a) - step) > step * 0.5]
@@ -119,7 +121,7 @@ def irregular_times(f, fps):
 
 def psnr(a, b, fr, fps):
     t = f"{fr / fps:.4f}"
-    e = run(ff("-nostats", "-ss", t, "-i", a, "-ss", t, "-i", b, "-frames:v", "1", "-lavfi", "psnr", "-f", "null", "-")).stderr
+    e = run(ff("-nostats", "-ss", t, "-i", a, "-threads", "2", "-ss", t, "-i", b, "-frames:v", "1", "-lavfi", "psnr", "-f", "null", "-")).stderr
     m = re.findall(r"average:([\d.inf]+)", e)
     return m[-1] if m else "?"
 
@@ -143,7 +145,7 @@ def sheet(f, frames, fps, w, h, strip, guides, dst):
             first = max(0, fr - 2)
             p = os.path.join(tmp, f"{fr:06d}.jpg")
             vf = ",".join([f"trim=end_frame={strip}", *boxes, f"scale={tw}:{th}", f"tile={strip}x1:padding=2:color=white"])
-            run(ff("-v", "error", "-y", "-ss", f"{first / fps:.4f}", "-i", f, "-vf", vf, "-frames:v", "1", p))
+            run(ff("-v", "error", "-y", "-ss", f"{first / fps:.4f}", "-i", f, "-threads", "2", "-vf", vf, "-frames:v", "1", p))
             if os.path.exists(p):
                 strips.append(Image.open(p).convert("RGB"))
         if not strips:
@@ -169,12 +171,13 @@ def simulate(f, w, h):
     ref = (1080, 1920) if h >= w else (1920, 1080)
     with tempfile.TemporaryDirectory() as tmp:
         sim, log = os.path.join(tmp, "sim.mp4"), os.path.join(tmp, "vmaf.json")
-        run(ff("-v", "error", "-y", "-i", f, "-map", "0:v:0", "-vf", f"scale={target[0]}:{target[1]}:flags=bicubic", "-c:v", "libx264",
-               "-preset", "medium", "-b:v", "1350k", "-maxrate", "1600k", "-bufsize", "2700k", "-pix_fmt", "yuv420p", sim))
+        run(ff("-v", "error", "-y", "-i", f, "-map", "0:v:0", "-vf", f"scale={target[0]}:{target[1]}:flags=bicubic",
+               "-threads", "2", "-c:v", "libx264", "-preset", "medium", "-b:v", "1350k", "-maxrate", "1600k", "-bufsize", "2700k",
+               "-pix_fmt", "yuv420p", sim))
         model = "version=vmaf_v0.6.1neg"
         lavfi = (f"[0:v]scale={ref[0]}:{ref[1]}:flags=bicubic,setpts=PTS-STARTPTS[d];[1:v]scale={ref[0]}:{ref[1]}:flags=bicubic,setpts=PTS-STARTPTS[r];"
                  f"[d][r]libvmaf=model='{model}':n_threads=2:log_fmt=json:log_path={log}")
-        run(ff("-v", "error", "-i", sim, "-i", f, "-lavfi", lavfi, "-f", "null", "-"))
+        run(ff("-v", "error", "-i", sim, "-threads", "2", "-i", f, "-lavfi", lavfi, "-f", "null", "-"))
         if not os.path.exists(log):
             return None
         fr = json.load(open(log))["frames"]

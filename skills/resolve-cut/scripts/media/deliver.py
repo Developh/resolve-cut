@@ -46,7 +46,8 @@ def main():
     ap.add_argument("--copy", help="folder or file to copy the clean file to")
     ap.add_argument("--no-editlist", action="store_true", help="MP4 without edit lists (YouTube)")
     a = ap.parse_args()
-    subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-y", "-threads", "2", "-i", a.export, "-map", "0:v:0", "-map", "0:a:0",
+    subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-y", "-filter_threads", "2", "-filter_complex_threads", "2",
+                    "-threads", "2", "-i", a.export, "-map", "0:v:0", "-map", "0:a:0",
                     "-c", "copy", "-write_tmcd", "0", "-map_metadata", "-1", *(["-use_editlist", "0"] if a.no_editlist else []),
                     "-movflags", "+faststart", a.clean], check=True, stdin=subprocess.DEVNULL)
     src, new = streams(a.export), streams(a.clean)

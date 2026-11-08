@@ -44,8 +44,9 @@ def api_key():
 def extract(media, flac, start=None, duration=None):
     """Sound of `media` (or of [start, start + duration] seconds) as 16 kHz mono FLAC."""
     cut = (["-ss", f"{start:.3f}", "-t", f"{duration:.3f}"] if start is not None else [])
-    r = subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-y", "-threads", "2", *cut, "-i", media,
-                        "-vn", "-ac", "1", "-ar", "16000", flac], capture_output=True, text=True, stdin=subprocess.DEVNULL)
+    r = subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-y", "-filter_threads", "2", "-filter_complex_threads", "2",
+                        "-threads", "2", *cut, "-i", media, "-threads", "2", "-vn", "-ac", "1", "-ar", "16000", flac],
+                       capture_output=True, text=True, stdin=subprocess.DEVNULL)
     return r.returncode == 0 and os.path.exists(flac)
 
 

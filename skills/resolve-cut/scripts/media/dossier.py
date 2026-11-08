@@ -67,7 +67,8 @@ def sheet(f, info, dst):
     img = Image.new("RGB", (6 * tw + 5 * 4, th), (255, 255, 255))
     for k in range(6):
         t = info["dur"] * (k + 0.5) / 6
-        r = subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-threads", "2", "-ss", f"{t:.3f}", "-i", f, "-frames:v", "1",
+        r = subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-filter_threads", "2", "-filter_complex_threads", "2",
+                            "-threads", "2", "-ss", f"{t:.3f}", "-i", f, "-threads", "2", "-frames:v", "1",
                             "-vf", f"scale={tw}:{th}:flags=area", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
                            capture_output=True, stdin=subprocess.DEVNULL)
         if len(r.stdout) == tw * th * 3:

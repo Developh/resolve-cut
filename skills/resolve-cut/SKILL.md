@@ -107,7 +107,8 @@ parameters next to these.
 Measured on macOS with Resolve Studio 21.1.1 and 21.1.2, October and November 2026.
 
 Machine
-- One ffmpeg at a time, with `nice -n 15` and `-threads 2`: 96 parallel ffmpeg processes froze the Mac and forced a reboot.
+- One ffmpeg at a time, with `nice -n 15` and `-threads 2`: 96 parallel ffmpeg processes froze the Mac and forced a reboot. `-threads` is a per-file option and only limits the next file: write it before every `-i` and again before the output's `-c:v`/`-c:a`, after the last `-i`, plus the global `-filter_threads 2 -filter_complex_threads 2` right after `-y` or `-v`. Written once at the start, it left libx264 running 15 threads (x264's SEI).
+- Encoder on a Mac: previews, proxies and intermediates in `h264_videotoolbox -profile:v high -q:v 78 -g 250 -bf 2 -pix_fmt yuv420p`, 6 times faster than libx264 medium CRF 18 at 2 threads, with 12 times less CPU and the same VMAF on a soft 1080p source. At the same bitrate it lost 0.6 VMAF on a 26.8 Mbps 1080p, so final deliveries and `qc.py --simulate` stay on libx264 (measured on an M4, FFmpeg 9.0.2, one run per test).
 - In zsh, `$var` does not split into words (`ffmpeg $args` breaks): build argument lists in Python.
 - Write outputs to the work folder: a helper that saved images next to the clip wrote into the raw footage drive.
 

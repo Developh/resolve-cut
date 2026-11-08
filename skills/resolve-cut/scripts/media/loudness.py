@@ -22,8 +22,9 @@ import sys
 
 
 def measure(f):
-    e = subprocess.run(["nice", "-n", "15", "ffmpeg", "-hide_banner", "-nostats", "-threads", "2", "-i", f, "-map", "0:a:0",
-                        "-af", "ebur128=peak=true", "-f", "null", "-"], capture_output=True, text=True, stdin=subprocess.DEVNULL).stderr
+    e = subprocess.run(["nice", "-n", "15", "ffmpeg", "-hide_banner", "-nostats", "-filter_threads", "2", "-filter_complex_threads", "2",
+                        "-threads", "2", "-i", f, "-map", "0:a:0", "-af", "ebur128=peak=true", "-f", "null", "-"],
+                       capture_output=True, text=True, stdin=subprocess.DEVNULL).stderr
     i = re.findall(r"^\s+I:\s+(-?[\d.]+) LUFS", e, re.M)
     p = re.findall(r"^\s+Peak:\s+(-?[\d.]+) dBFS", e, re.M)
     if not i or not p:
@@ -52,10 +53,11 @@ def main():
     gain, ceiling = a.target - i0, 10 ** ((a.peak - 0.3) / 20)
     print(f"input: {i0} LUFS, true peak {p0} dBTP")
     for n in range(1, 6):
-        cmd = ["nice", "-n", "15", "ffmpeg", "-v", "error", "-y", "-threads", "2", "-i", a.input]
+        cmd = ["nice", "-n", "15", "ffmpeg", "-v", "error", "-y", "-filter_threads", "2", "-filter_complex_threads", "2",
+               "-threads", "2", "-i", a.input]
         cmd += ["-map", "0:v:0", "-c:v", "copy"] if has_video else []
         cmd += ["-map", "0:a:0", "-af", f"volume={gain:.2f}dB,alimiter=limit={ceiling:.4f}:attack=2:release=60:level=false,aresample=48000",
-                "-c:a", "aac", "-b:a", f"{a.aac}k", "-write_tmcd", "0", "-map_metadata", "-1", "-movflags", "+faststart", tmp]
+                "-threads", "2", "-c:a", "aac", "-b:a", f"{a.aac}k", "-write_tmcd", "0", "-map_metadata", "-1", "-movflags", "+faststart", tmp]
         subprocess.run(cmd, check=True, stdin=subprocess.DEVNULL)
         i, p = measure(tmp)
         print(f"pass {n}: gain {gain:+.2f} dB, ceiling {20 * math.log10(ceiling):.2f} dBFS → {i} LUFS, true peak {p} dBTP")

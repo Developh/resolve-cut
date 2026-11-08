@@ -74,8 +74,9 @@ def energy(clip, lo, hi):
     a = max(0.0, lo - 0.1)
     k = (clip, round(a, 2), round(hi, 2))
     if k not in _sound:
-        raw = subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-threads", "2", "-ss", f"{a:.3f}", "-t", f"{hi - a + 0.1:.3f}",
-                              "-i", media(clip), "-vn", "-ac", "1", "-ar", "48000", "-f", "s16le", "-"],
+        raw = subprocess.run(["nice", "-n", "15", "ffmpeg", "-v", "error", "-filter_threads", "2", "-filter_complex_threads", "2",
+                              "-threads", "2", "-ss", f"{a:.3f}", "-t", f"{hi - a + 0.1:.3f}", "-i", media(clip),
+                              "-threads", "2", "-vn", "-ac", "1", "-ar", "48000", "-f", "s16le", "-"],
                              capture_output=True, check=True, stdin=subprocess.DEVNULL).stdout
         _sound[k] = np.frombuffer(raw, dtype="<i2").astype(np.float64) / 32768
     x, out, f = _sound[k], [], math.ceil(lo * FPS)
