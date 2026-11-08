@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>davinci-resolve-agent hero</title>
+<title>resolve-cut hero</title>
 <!--
   Source of assets/hero.png (3200x1440). Rendered with headless Chrome at 2x:
   chrome --headless=new --user-data-dir=<temp dir> --hide-scrollbars --force-device-scale-factor=2 \
@@ -80,7 +80,8 @@
   .a1 .seg { background: #1f1f1f; }
   .a1 .seg.p { background: #262626; }
   .head { position: absolute; top: -5px; bottom: -20px; right: -1px; width: 2px; background: var(--accent); border-radius: 1px; }
-  footer { display: flex; justify-content: center; margin-top: 32px; }
+  footer { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 32px; }
+  .by { font-family: var(--mono); font-size: 15px; color: var(--fg-3); letter-spacing: -0.01em; }
   .sig {
     width: 96px; aspect-ratio: 1710 / 1041; background: var(--fg); opacity: 0.55;
     -webkit-mask: url(https://www.tiagonrodrigues.com/signature.png) center / contain no-repeat;
@@ -90,7 +91,7 @@
 </head>
 <body>
   <header>
-    <div class="path"><span>~/</span>davinci-resolve-agent</div>
+    <div class="path"><span>developh/</span>resolve-cut</div>
     <div class="pill">Claude Code skill · Resolve Studio 21.1</div>
   </header>
 
@@ -124,7 +125,7 @@
     </div>
   </div>
 
-  <footer><div class="sig" role="img" aria-label="Tiago Rodrigues"></div></footer>
+  <footer><div class="sig" role="img" aria-label="Tiago Rodrigues"></div><span class="by">at Developh</span></footer>
 
 <script>
   // Lesson 01 v2, the timeline the agent rendered: take label, frames, punch-in (zoom 1.2)

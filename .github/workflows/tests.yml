@@ -13,10 +13,10 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install numpy and Pillow
-        run: python -m pip install -r skills/davinci-resolve-agent/scripts/requirements.txt
+        run: python -m pip install -r skills/resolve-cut/scripts/requirements.txt
       - name: Every script compiles and answers --help
         run: |
-          for f in skills/davinci-resolve-agent/scripts/*/*.py; do
+          for f in skills/resolve-cut/scripts/*/*.py; do
             python -m py_compile "$f"
             python "$f" --help > /dev/null
           done

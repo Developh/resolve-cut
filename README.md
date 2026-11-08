@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./assets/hero.png" alt="davinci-resolve-agent: Claude Code edits, renders and checks videos in DaVinci Resolve" width="100%">
+  <img src="./assets/hero.png" alt="resolve-cut: Claude Code edits, renders and checks videos in DaVinci Resolve" width="100%">
 </p>
 
-# davinci-resolve-agent
+# resolve-cut
 
 > Claude Code edits, renders and checks your videos in DaVinci Resolve.
 
@@ -10,8 +10,8 @@
 [![DaVinci Resolve Studio](https://img.shields.io/badge/DaVinci%20Resolve%20Studio-21.1-0b0b0b.svg)]()
 [![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-0b0b0b.svg)]()
 [![Tested on macOS](https://img.shields.io/badge/tested%20on-macOS-0b0b0b.svg)]()
-[![tests](https://github.com/tiagonrodrigues/davinci-resolve-agent/actions/workflows/tests.yml/badge.svg)](https://github.com/tiagonrodrigues/davinci-resolve-agent/actions/workflows/tests.yml)
-[![skills.sh](https://skills.sh/b/tiagonrodrigues/davinci-resolve-agent)](https://skills.sh/tiagonrodrigues/davinci-resolve-agent)
+[![tests](https://github.com/Developh/resolve-cut/actions/workflows/tests.yml/badge.svg)](https://github.com/Developh/resolve-cut/actions/workflows/tests.yml)
+[![skills.sh](https://skills.sh/b/developh/resolve-cut)](https://skills.sh/developh/resolve-cut)
 
 An agent skill plus the scripts behind it. The agent reads word-level transcripts of the raw footage, keeps the last complete take of every paragraph, builds a frame-accurate cut list, assembles the timeline in DaVinci Resolve by script, renders it with a preset and checks the file before it says it's done: loudness, frames, bitrate, and a transcript of the final mix to catch words doubled or cut at the edits.
 
@@ -70,13 +70,13 @@ Tested on macOS (Apple Silicon) with Resolve Studio 21.1.2. The scripts use the 
 ### The skill
 
 ```bash
-bunx skills add tiagonrodrigues/davinci-resolve-agent -g -a claude-code
+bunx skills add developh/resolve-cut -g -a claude-code
 ```
 
-This installs `davinci-resolve-agent` into `~/.claude/skills/`, scripts and render presets included. Check that Resolve answers:
+This installs `resolve-cut` into `~/.claude/skills/`, scripts and render presets included. Check that Resolve answers:
 
 ```bash
-python3 ~/.claude/skills/davinci-resolve-agent/scripts/resolve/run.py - '{}' <<< 'result = resolve.GetVersionString()'
+python3 ~/.claude/skills/resolve-cut/scripts/resolve/run.py - '{}' <<< 'result = resolve.GetVersionString()'
 ```
 
 ### MCP servers (optional)
@@ -116,7 +116,7 @@ Script: /path/to/script.md, the "Lesson 01" section.
 3. Render the episode to /path/to/out/lesson-01.mp4 (1920x1080, H.264), wait for the render to
    finish and check it with qc.py.
 
-Use the davinci-resolve-agent skill. One ffmpeg at a time. Import one file per call into
+Use the resolve-cut skill. One ffmpeg at a time. Import one file per call into
 Resolve. Don't open other apps.
 ```
 
@@ -159,7 +159,7 @@ What worked best:
 ## What's inside
 
 ```
-skills/davinci-resolve-agent/
+skills/resolve-cut/
   SKILL.md                    the flow, delivery targets and every verified trap
   scripts/resolve/            run inside Resolve (through run.py)
     run.py  project.py  assemble.py  frames.py  render.py  swap_media.py
@@ -182,4 +182,4 @@ DaVinci Resolve is a trademark of Blackmagic Design. This project is not affilia
 
 ## Credits
 
-Built by [Tiago Rodrigues](https://www.tiagonrodrigues.com) to edit the lessons at [Forma](https://learnforma.com).
+Built by [Tiago Rodrigues](https://www.tiagonrodrigues.com) at [Developh](https://developh.co), a design and development studio in Lisbon, to edit the lessons at [Forma](https://learnforma.com).

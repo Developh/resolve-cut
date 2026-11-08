@@ -10,7 +10,7 @@ import sys
 import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "skills", "davinci-resolve-agent", "scripts", "media"))
+sys.path.insert(0, os.path.join(HERE, "..", "skills", "resolve-cut", "scripts", "media"))
 
 
 def word(text, start, end):

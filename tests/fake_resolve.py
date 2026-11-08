@@ -4,7 +4,7 @@ plumbing, not Resolve's behaviour: the traps in SKILL.md were measured on the re
 import json
 import os
 
-SCRIPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "skills", "davinci-resolve-agent", "scripts")
+SCRIPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "skills", "resolve-cut", "scripts")
 calls = []
 
 

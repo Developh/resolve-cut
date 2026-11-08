@@ -7,7 +7,7 @@ import os
 
 import qrcode
 
-URL = "https://github.com/tiagonrodrigues/davinci-resolve-agent"
+URL = "https://github.com/Developh/resolve-cut"
 qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_Q, box_size=24, border=4)
 qr.add_data(URL)
 qr.make(fit=True)

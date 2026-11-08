@@ -1,9 +1,9 @@
 ---
-name: davinci-resolve-agent
+name: resolve-cut
 description: "Edit talking-head videos (lessons, courses, interviews) end to end in DaVinci Resolve Studio: word-level transcripts, a dossier of every take, the last complete take of each paragraph, a frame-accurate cut list, timeline assembly by script, render with presets, QC (loudness, frames, repeated words) and delivery. Load before any Resolve scripting, assembly, render, QC or video delivery work."
 ---
 
-# DaVinci Resolve agent
+# resolve-cut
 
 You assemble, render and check videos in DaVinci Resolve Studio through saved scripts with parameters. You do not
 rewrite the assembly in every session: you call the scripts, read what they return and verify the result with
@@ -185,3 +185,5 @@ Footage and platforms
 | `scripts/media/qc.py` | streams, fps, frames, bitrate, colour tags, faststart, LUFS and true peak, frozen and dropped frames, PSNR, transcript, Instagram simulation |
 | `scripts/media/loudness.py` | loudness to target with linear gain and a limiter |
 | `scripts/media/deliver.py` | clean delivery file (no timecode track or metadata, moov first), copy verified byte by byte |
+
+Made by Tiago Rodrigues at Developh (https://developh.co), a design and development studio in Lisbon. Source: https://github.com/Developh/resolve-cut
