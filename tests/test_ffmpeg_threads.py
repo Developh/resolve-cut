@@ -4,13 +4,16 @@ like -ss, -t, -f or -loop, may sit between the two) and -threads 2 after the las
 copy. An output with no codec flag still encodes (s16le, flac, png) and needs it too; -f null and stream copy do not.
 Static: reads the scripts with ast and runs nothing. It follows helpers like ff(*a), lists built with +=, extend and
 append, and lists spread with *. It checks both sides of `x if c else y`, and additions made inside an if or a loop
-both with and without them. A command it cannot read fails, and so does finding no ffmpeg call at all.
+both with and without them. A command it cannot read fails, and so does finding no ffmpeg call at all. ffmpeg named
+anywhere else (a shell string, a path, a name kept in a variable, shutil.which) fails too, since this test would not
+see that call.
 
     python3 tests/test_ffmpeg_threads.py
 """
 import ast
 import glob
 import os
+import re
 import sys
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
@@ -18,6 +21,7 @@ SCRIPTS = os.path.join(ROOT, "skills", "resolve-cut", "scripts")
 CODEC_FLAGS = ("-c", "-codec", "-vcodec", "-acodec")
 MUTATORS = ("append", "extend", "insert", "remove", "pop", "clear", "sort", "reverse")
 MAX_VARIANTS = 256
+SHELL_FFMPEG = re.compile(r"(?:^|[\s/])ffmpeg\s+-")
 
 
 class Unreadable(Exception):
@@ -195,6 +199,21 @@ class Script:
                 if not uses:
                     yield top.lineno, lambda top=top: self.alternatives(top)
 
+    def strays(self):
+        """(line, text) for ffmpeg named outside a list that calls() reads: "ffmpeg" or a path to it on its own, or a
+        string that runs it ("ffmpeg -i ..."). Docstrings do not count."""
+        docs = {id(n.body[0].value) for n in ast.walk(self.tree)
+                if isinstance(n, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and n.body
+                and isinstance(n.body[0], ast.Expr) and isinstance(n.body[0].value, ast.Constant)}
+        for n in ast.walk(self.tree):
+            if not (isinstance(n, ast.Constant) and isinstance(n.value, str)) or id(n) in docs:
+                continue
+            v = n.value
+            if v == "ffmpeg" and is_ffmpeg_list(self.parent[n][0]):
+                continue
+            if v == "ffmpeg" or v.endswith("/ffmpeg") or SHELL_FFMPEG.search(v):
+                yield n.lineno, v
+
 
 def last_value(t, flag, lo, hi):
     """Value of the last `flag` in t[lo:hi] (flag and value both inside), or None."""
@@ -276,6 +295,9 @@ def main():
                     if problem not in seen:
                         seen.add(problem)
                         errors.append(f"{where}: {problem}\n    {' '.join(tokens)}")
+        for line, text in script.strays():
+            errors.append(f"{script.rel}:{line}: ffmpeg outside a command list this test reads ({text!r}): write the call as "
+                          f"a list starting with \"nice\", \"-n\", \"15\", \"ffmpeg\", or teach this test the new form")
     if not total:
         sys.exit(f"no ffmpeg call found in {os.path.relpath(SCRIPTS, ROOT)}: this test no longer sees the commands it guards")
     if errors:
