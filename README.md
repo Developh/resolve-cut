@@ -168,11 +168,12 @@ skills/resolve-cut/
     transcribe.py  dossier.py  inspect_range.py  cut_list.py  add_markers.py
     qc.py  loudness.py  deliver.py
 tests/                        the Resolve scripts against a fake Resolve API; cut list,
-                              markers and dossier on synthetic transcripts
+                              markers and dossier on synthetic transcripts; nice and
+                              -threads 2 in every ffmpeg call, read from the source
 assets/src/                   sources of the hero image and the QR code
 ```
 
-Every script answers `--help`. `python3 tests/test_resolve_scripts.py` and `python3 tests/test_media_scripts.py` check the scripts' own logic without Resolve or ffmpeg; the traps in the skill were measured on the real thing. The run in "The problem" used the Portuguese originals of these scripts; this repo has them translated and generalized.
+Every script answers `--help`. `python3 tests/test_resolve_scripts.py` and `python3 tests/test_media_scripts.py` check the scripts' own logic without Resolve or ffmpeg, and `python3 tests/test_ffmpeg_threads.py` reads every ffmpeg call in the scripts and fails if one loses `nice -n 15` or a `-threads 2`; the traps in the skill were measured on the real thing. The run in "The problem" used the Portuguese originals of these scripts; this repo has them translated and generalized.
 
 ## License
 

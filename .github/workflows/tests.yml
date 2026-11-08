@@ -24,3 +24,5 @@ jobs:
         run: python tests/test_resolve_scripts.py
       - name: Cut list, markers and dossier on synthetic transcripts
         run: python tests/test_media_scripts.py
+      - name: Every ffmpeg call runs under nice with 2 threads per input and encoder
+        run: python tests/test_ffmpeg_threads.py
