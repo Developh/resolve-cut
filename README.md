@@ -11,6 +11,7 @@
 [![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-0b0b0b.svg)]()
 [![Tested on macOS](https://img.shields.io/badge/tested%20on-macOS-0b0b0b.svg)]()
 [![tests](https://github.com/tiagonrodrigues/davinci-resolve-agent/actions/workflows/tests.yml/badge.svg)](https://github.com/tiagonrodrigues/davinci-resolve-agent/actions/workflows/tests.yml)
+[![skills.sh](https://skills.sh/b/tiagonrodrigues/davinci-resolve-agent)](https://skills.sh/tiagonrodrigues/davinci-resolve-agent)
 
 An agent skill plus the scripts behind it. The agent reads word-level transcripts of the raw footage, keeps the last complete take of every paragraph, builds a frame-accurate cut list, assembles the timeline in DaVinci Resolve by script, renders it with a preset and checks the file before it says it's done: loudness, frames, bitrate, and a transcript of the final mix to catch words doubled or cut at the edits.
 
