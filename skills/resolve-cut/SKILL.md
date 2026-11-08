@@ -186,4 +186,4 @@ Footage and platforms
 | `scripts/media/loudness.py` | loudness to target with linear gain and a limiter |
 | `scripts/media/deliver.py` | clean delivery file (no timecode track or metadata, moov first), copy verified byte by byte |
 
-Made by Tiago Rodrigues at Developh (https://developh.co), a design and development studio in Lisbon. Source: https://github.com/Developh/resolve-cut
+Made by Tiago Rodrigues at Developh (https://www.developh.co), a design and development studio in Lisbon. Source: https://github.com/Developh/resolve-cut

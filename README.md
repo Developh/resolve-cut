@@ -182,4 +182,4 @@ DaVinci Resolve is a trademark of Blackmagic Design. This project is not affilia
 
 ## Credits
 
-Built by [Tiago Rodrigues](https://www.tiagonrodrigues.com) at [Developh](https://developh.co), a design and development studio in Lisbon, to edit the lessons at [Forma](https://learnforma.com).
+Built by [Tiago Rodrigues](https://www.tiagonrodrigues.com) at [Developh](https://www.developh.co), a design and development studio in Lisbon, to edit the lessons at [Forma](https://learnforma.com).
